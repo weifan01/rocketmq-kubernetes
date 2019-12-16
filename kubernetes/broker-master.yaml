@@ -1,25 +1,4 @@
 ---
-kind: ConfigMap
-apiVersion: v1
-metadata:
-  namespace: middle
-  name: cm-rocketmq-broker-master
-data:
-  broker.conf: |
-    brokerClusterName=camaro
-    brokerId=0
-    brokerName=broker-0/1
-    brokerRole=ASYNC_MASTER
-    namesrvAddr=rocketmq-namesrv-0.namesrv.middle:9876;rocketmq-namesrv-1.namesrv.middle:9876
-    waitTimeMillsInSendQueue=5000
-    deleddWhen=04
-    fileReservedTime=720
-    flushDiskType=ASYNC_FLUSH
-    autoCreateTopicEnable=FALSE
-    diskMaxUsedSpaceRatio=88
-# brokerName一致brokerId不一样为一个主从（brokerRole=ASYNC_MASTER，brokerRole=SLAVE）
-
----
 kind: Service
 apiVersion: v1
 metadata:
@@ -67,9 +46,20 @@ spec:
       containers:
       - image: reg.maihaoche.com/library/rocketmq-broker:4.2.0
         name: rocketmq-broker-master
+        imagePullPolicy: Always
         env:
           - name: JAVA_OPT
             value: "-Duser.home=/opt -Xms2g -Xmx2g"
+          - name: BROKER_CLUSTER_NAME
+            value: "camaro"
+          - name: BROKER_ID
+            value: "0"
+          - name: BROKER_ROLE
+            value: "ASYNC_MASTER"
+          - name: NAME_SRV_ADDR
+            value: "rocketmq-namesrv-0.namesrv.middle:9876;rocketmq-namesrv-1.namesrv.middle:9876"
+          - name: AUTO_CREATE_TOPIC_ENABLE
+            value: "FALSE"
         ports:
         - protocol: TCP
           containerPort: 10909
@@ -85,9 +75,6 @@ spec:
         volumeMounts:
         - name: mqstore
           mountPath: /opt/store
-        - name: conf
-          mountPath: /opt/rocketmq-4.2.0/conf/broker.conf
-          subPath: broker.conf
         readinessProbe:
           tcpSocket:
             port: 10909
@@ -100,10 +87,6 @@ spec:
           periodSeconds: 10
       imagePullSecrets:
         - name: reg-out
-      volumes:
-        - name: conf
-          configMap:
-            name: cm-rocketmq-broker-master
   volumeClaimTemplates:
     - metadata:
         name: mqstore

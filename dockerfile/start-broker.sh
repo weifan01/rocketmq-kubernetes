@@ -1,5 +1,5 @@
 #!/bin/bash
-#brokername一致，brokerid不一致，brokerrole不一致，此脚本生成
+
 CONFIG_FILE="$ROCKETMQ_HOME/conf/broker.conf"
 
 if [[ $HOSTNAME =~ (.*)-([0-9]+)$ ]]; then
@@ -37,9 +37,5 @@ diskMaxUsedSpaceRatio=88
 waitTimeMillsInSendQueue=5000
 EOF
 
-
-
-
-sed -i '/brokerName=/ s/=.*/=broker-'$ORD'/g' $CONFIG_FILE
 cd $ROCKETMQ_HOME
 sh bin/mqbroker -c conf/broker.conf
