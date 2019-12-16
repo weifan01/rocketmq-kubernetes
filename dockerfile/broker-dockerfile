@@ -1,0 +1,15 @@
+FROM reg.haimaiche.net/library/base_jdk:1.0
+
+ENV ROCKETMQ_HOME  /opt/rocketmq-4.2.0
+WORKDIR  ${ROCKETMQ_HOME}
+EXPOSE 10909 10911
+COPY start-broker.sh .
+RUN mkdir -p /opt/logs /opt/store && \
+    wget https://archive.apache.org/dist/rocketmq/4.2.0/rocketmq-all-4.2.0-bin-release.zip -O rocketmq-all-4.2.0-bin-release.zip && \
+    unzip rocketmq-all-4.2.0-bin-release.zip && \
+    rm -f rocketmq-all-4.2.0-bin-release.zip && \
+    sed -i 's/-Xm[sxn]..//g' bin/runbroker.sh
+
+ENTRYPOINT bash start-broker.sh
+
+VOLUME /opt/logs /opt/store
