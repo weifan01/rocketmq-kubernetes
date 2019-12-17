@@ -1,0 +1,80 @@
+---
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  namespace: middle
+  name: cm-rocketmq-console
+data:
+  JAVA_OPTS: "-Drocketmq.namesrv.addr=rocketmq-namesrv-0.namesrv.middle:9876;rocketmq-namesrv-1.namesrv.middle:9876 -Dcom.rocketmq.sendMessageWithVIPChannel=false"
+
+---
+kind: Service
+apiVersion: v1
+metadata:
+  namespace: middle
+  name: svc-rocketmq-console
+  labels:
+    app: rocketmq-console
+spec:
+  ports:
+  - protocol: TCP
+    port: 8080
+    targetPort: 8080
+  selector:
+    app: rocketmq-console
+  type: ClusterIP
+
+---
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  namespace: middle
+  name: rocketmq-console
+  labels:
+    app: rocketmq-console
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: rocketmq-console
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: rocketmq-console
+    spec:
+      containers:
+      - image: styletang/rocketmq-console-ng
+        securityContext:
+          privileged: true
+        imagePullPolicy: IfNotPresent
+        name: rocketmq-console
+        ports:
+        - protocol: TCP
+          containerPort: 8080
+        envFrom:
+        - configMapRef:
+            name: cm-rocketmq-console
+        resources:
+          requests:
+            cpu: 200m
+            memory: 1Gi
+          limits:
+            cpu: 1
+            memory: 1.5Gi
+        readinessProbe:
+          tcpSocket:
+            port: 8080
+          initialDelaySeconds: 60
+          periodSeconds: 5
+        livenessProbe:
+          tcpSocket:
+            port: 8080
+          initialDelaySeconds: 120
+          periodSeconds: 15
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
