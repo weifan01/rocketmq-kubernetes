@@ -75,6 +75,8 @@ spec:
         volumeMounts:
         - name: mqstore
           mountPath: /opt/store
+        - name: mqlogs
+          mountPath: /opt/logs
         readinessProbe:
           tcpSocket:
             port: 10909
@@ -97,3 +99,12 @@ spec:
           requests:
             storage: "20Gi"
         storageClassName: alicloud-disk-ssd-hangzhou-be
+    - metadata:
+        name: mqlogs
+      spec:
+        accessModes:
+          - "ReadWriteOnce"
+        resources:
+          requests:
+            storage: "20Gi"
+        storageClassName: alicloud-nas-log
