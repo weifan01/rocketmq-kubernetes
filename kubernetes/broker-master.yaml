@@ -44,7 +44,7 @@ spec:
         app: rocketmq-broker-master
     spec:
       containers:
-      - image: reg.maihaoche.com/library/rocketmq-broker:4.7.0
+      - image: reg.haimaiche.net/library/rocketmq-broker:4.7.0
         name: rocketmq-broker-master
         imagePullPolicy: Always
         env:
@@ -57,7 +57,7 @@ spec:
           - name: BROKER_ROLE
             value: "ASYNC_MASTER"
           - name: NAME_SRV_ADDR
-            value: "rocketmq-namesrv-0.namesrv.middle:9876;rocketmq-namesrv-1.namesrv.middle:9876"
+            value: "rocketmq-namesrv-0.namesrv.middle:9876"
           - name: AUTO_CREATE_TOPIC_ENABLE
             value: "FALSE"
         ports:
@@ -88,7 +88,7 @@ spec:
           initialDelaySeconds: 120
           periodSeconds: 10
       imagePullSecrets:
-        - name: reg-out
+        - name: reg-in
   volumeClaimTemplates:
     - metadata:
         name: mqstore

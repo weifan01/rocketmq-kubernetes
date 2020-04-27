@@ -44,7 +44,7 @@ spec:
         app: rocketmq-broker-slave
     spec:
       containers:
-      - image: reg.maihaoche.com/library/rocketmq-broker:4.7.0
+      - image: reg.haimaiche.net/library/rocketmq-broker:4.7.0
         name: rocketmq-broker-slave
         imagePullPolicy: Always
         env:
@@ -88,7 +88,7 @@ spec:
           initialDelaySeconds: 120
           periodSeconds: 10
       imagePullSecrets:
-        - name: reg-out
+        - name: reg-in
   volumeClaimTemplates:
     - metadata:
         name: mqstore

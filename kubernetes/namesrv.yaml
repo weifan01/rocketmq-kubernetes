@@ -2,7 +2,7 @@
 kind: Service
 apiVersion: v1
 metadata:
-  namespace: middle
+  namespace: test
   name: namesrv
   labels:
     app: rocketmq-namesrv
@@ -21,12 +21,12 @@ spec:
 kind: StatefulSet
 apiVersion: apps/v1
 metadata:
-  namespace: middle
+  namespace: test
   name: rocketmq-namesrv
   labels:
     app: rocketmq-namesrv
 spec:
-  replicas: 2
+  replicas: 1
   serviceName: namesrv
   selector:
     matchLabels:
@@ -39,7 +39,7 @@ spec:
         app: rocketmq-namesrv
     spec:
       containers:
-      - image: reg.maihaoche.com/library/rocketmq-namesrv:4.2.0
+      - image: reg.haimaiche.net/library/rocketmq-namesrv:4.7.0
         imagePullPolicy: Always
         name: rocketmq-namesrv
         ports:
@@ -48,10 +48,10 @@ spec:
         resources:
           requests:
             cpu: 200m
-            memory: 2Gi
+            memory: 1Gi
           limits:
             cpu: 1
-            memory: 2Gi
+            memory: 1Gi
         readinessProbe:
           tcpSocket:
             port: 9876
@@ -63,4 +63,4 @@ spec:
           initialDelaySeconds: 120
           periodSeconds: 10
       imagePullSecrets:
-        - name: reg-out
+        - name: reg-in
