@@ -2,7 +2,7 @@
 kind: Service
 apiVersion: v1
 metadata:
-  namespace: middle
+  namespace: test
   name: svc-rocketmq-broker-slave
   labels:
     app: rocketmq-broker
@@ -26,12 +26,12 @@ spec:
 kind: StatefulSet
 apiVersion: apps/v1
 metadata:
-  namespace: middle
+  namespace: test
   name: rocketmq-broker-slave
   labels:
     app: rocketmq-broker-slave
 spec:
-  replicas: 2
+  replicas: 1
   serviceName: svc-rocketmq-broker-slave
   selector:
     matchLabels:
@@ -44,7 +44,7 @@ spec:
         app: rocketmq-broker-slave
     spec:
       containers:
-      - image: reg.maihaoche.com/library/rocketmq-broker:4.2.0
+      - image: reg.maihaoche.com/library/rocketmq-broker:4.7.0
         name: rocketmq-broker-slave
         imagePullPolicy: Always
         env:
@@ -68,10 +68,10 @@ spec:
         resources:
           requests:
             cpu: 500m
-            memory: 4Gi
+            memory: 3Gi
           limits:
             cpu: 2
-            memory: 4Gi
+            memory: 3Gi
         volumeMounts:
         - name: mqstore
           mountPath: /opt/store
@@ -98,7 +98,7 @@ spec:
         resources:
           requests:
             storage: "20Gi"
-        storageClassName: alicloud-disk-ssd-hangzhou-be
+        storageClassName: managed-nfs-storage-02
     - metadata:
         name: mqlogs
       spec:
@@ -107,4 +107,4 @@ spec:
         resources:
           requests:
             storage: "20Gi"
-        storageClassName: alicloud-nas-log
+        storageClassName: managed-nfs-storage

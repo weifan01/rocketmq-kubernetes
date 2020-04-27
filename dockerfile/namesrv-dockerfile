@@ -1,13 +1,14 @@
 FROM reg.haimaiche.net/library/base_jdk:1.0
 
-ENV ROCKETMQ_HOME  /opt/rocketmq-4.2.0
+ENV ROCKETMQ_HOME  /opt/rocketmq-4.7.0
 WORKDIR  ${ROCKETMQ_HOME}
 EXPOSE 9876
 
 RUN mkdir -p /opt/logs /opt/store && \
-    wget https://archive.apache.org/dist/rocketmq/4.2.0/rocketmq-all-4.2.0-bin-release.zip -O rocketmq-all-4.2.0-bin-release.zip && \
-    unzip rocketmq-all-4.2.0-bin-release.zip && \
-    rm -f rocketmq-all-4.2.0-bin-release.zip && \
+    wget https://archive.apache.org/dist/rocketmq/4.7.0/rocketmq-all-4.7.0-bin-release.zip -O rocketmq-all-4.7.0-bin-release.zip && \
+    unzip rocketmq-all-4.7.0-bin-release.zip && \
+    rm -f rocketmq-all-4.7.0-bin-release.zip && \
+    mv rocketmq-all-4.7.0-bin-release/* . && \
     sed -i 's/-Xm[sxn]..//g' bin/runserver.sh
 
 ENTRYPOINT sh bin/mqnamesrv
