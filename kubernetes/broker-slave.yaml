@@ -57,7 +57,7 @@ spec:
           - name: BROKER_ROLE
             value: "SLAVE"
           - name: NAME_SRV_ADDR
-            value: "rocketmq-namesrv-0.namesrv.middle:9876;rocketmq-namesrv-1.namesrv.middle:9876"
+            value: "rocketmq-namesrv-0.namesrv.test:9876"
           - name: AUTO_CREATE_TOPIC_ENABLE
             value: "FALSE"
         ports:

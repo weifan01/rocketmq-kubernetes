@@ -2,16 +2,16 @@
 kind: ConfigMap
 apiVersion: v1
 metadata:
-  namespace: middle
+  namespace: test
   name: cm-rocketmq-console
 data:
-  JAVA_OPTS: "-Drocketmq.namesrv.addr=rocketmq-namesrv-0.namesrv.middle:9876;rocketmq-namesrv-1.namesrv.middle:9876 -Dcom.rocketmq.sendMessageWithVIPChannel=false"
+  JAVA_OPTS: "-Drocketmq.namesrv.addr=rocketmq-namesrv-0.namesrv.test:9876 -Dcom.rocketmq.sendMessageWithVIPChannel=false"
 
 ---
 kind: Service
 apiVersion: v1
 metadata:
-  namespace: middle
+  namespace: test
   name: svc-rocketmq-console
   labels:
     app: rocketmq-console
@@ -28,7 +28,7 @@ spec:
 kind: Deployment
 apiVersion: apps/v1
 metadata:
-  namespace: middle
+  namespace: test
   name: rocketmq-console
   labels:
     app: rocketmq-console
@@ -48,7 +48,7 @@ spec:
         app: rocketmq-console
     spec:
       containers:
-      - image: styletang/rocketmq-console-ng
+      - image: reg.haimaiche.net/library/rocketmq-console-ng:1.0
         securityContext:
           privileged: true
         imagePullPolicy: IfNotPresent
