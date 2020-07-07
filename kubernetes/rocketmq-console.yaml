@@ -2,16 +2,16 @@
 kind: ConfigMap
 apiVersion: v1
 metadata:
-  namespace: test
+  namespace: NAMESPACE
   name: cm-rocketmq-console
 data:
-  JAVA_OPTS: "-Drocketmq.namesrv.addr=svc-rocketmq-namesrv.test.NAMESPACE.mhc.local:9876 -Dcom.rocketmq.sendMessageWithVIPChannel=false"
+  JAVA_OPTS: "-Drocketmq.namesrv.addr=svc-rocketmq.NAMESPACE.svc.mhc.local:9876 -Dcom.rocketmq.sendMessageWithVIPChannel=false"
 
 ---
 kind: Service
 apiVersion: v1
 metadata:
-  namespace: test
+  namespace: NAMESPACE
   name: svc-rocketmq-console
   labels:
     app: rocketmq-console
@@ -28,7 +28,7 @@ spec:
 kind: Deployment
 apiVersion: apps/v1
 metadata:
-  namespace: test
+  namespace: NAMESPACE
   name: rocketmq-console
   labels:
     app: rocketmq-console
