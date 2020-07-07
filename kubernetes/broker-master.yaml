@@ -2,7 +2,7 @@
 kind: Service
 apiVersion: v1
 metadata:
-  namespace: test
+  namespace: NAMESPACE
   name: svc-rocketmq-broker-master
   labels:
     app: rocketmq-broker
@@ -26,7 +26,7 @@ spec:
 kind: StatefulSet
 apiVersion: apps/v1
 metadata:
-  namespace: test
+  namespace: NAMESPACE
   name: rocketmq-broker-master
   labels:
     app: rocketmq-broker-master
@@ -44,20 +44,20 @@ spec:
         app: rocketmq-broker-master
     spec:
       containers:
-      - image: reg.haimaiche.net/library/rocketmq-broker:4.7.0
+      - image: reg.haimaiche.net/library/rocketmq-broker:4.7.1
         name: rocketmq-broker-master
         imagePullPolicy: Always
         env:
           - name: JAVA_OPT
             value: "-Duser.home=/opt -Xms2g -Xmx2g"
           - name: BROKER_CLUSTER_NAME
-            value: "camaro"
+            value: "NAMESPACE"
           - name: BROKER_ID
             value: "0"
           - name: BROKER_ROLE
             value: "ASYNC_MASTER"
           - name: NAME_SRV_ADDR
-            value: "rocketmq-namesrv-0.namesrv.test:9876"
+            value: "svc-rocketmq.NAMESPACE.svc.mhc.local:9876"
           - name: AUTO_CREATE_TOPIC_ENABLE
             value: "FALSE"
         ports:
@@ -67,10 +67,10 @@ spec:
           containerPort: 10911
         resources:
           requests:
-            cpu: 500m
+            cpu: 800m
             memory: 3Gi
           limits:
-            cpu: 2
+            cpu: 800m
             memory: 3Gi
         volumeMounts:
         - name: mqstore

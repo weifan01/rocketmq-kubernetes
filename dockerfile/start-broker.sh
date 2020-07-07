@@ -11,6 +11,40 @@ else
     exit 1
 fi
 
+if [ -z "$BROKER_CLUSTER_NAME" ];then
+    echo "please add env: BROKER_CLUSTER_NAME."
+    exit 1
+fi
+
+if [ -z "$BROKER_ID" ];then
+    echo "please add env: BROKER_ID."
+    exit 1
+fi
+
+if [ -z "$BROKER_ROLE" ];then
+    echo "no such env: BROKER_ROLE."
+    echo "use default value: ASYNC_MASTER."
+    BROKER_ROLE=ASYNC_MASTER
+fi
+
+if [ -z "$NAME_SRV_ADDR" ];then
+    echo "please add env: NAME_SRV_ADDR."
+    exit 1
+fi
+
+if [ -z "$AUTO_CREATE_TOPIC_ENABLE" ];then
+    echo "no such env: AUTO_CREATE_TOPIC_ENABLE."
+    echo "use default value: FALSE"
+    AUTO_CREATE_TOPIC_ENABLE=FALSE
+fi
+
+if [ -z "$FLUSHDISKTYPE" ];then
+    echo "no such env: FLUSHDISKTYPE."
+    echo "use default value: ASYNC_FLUSH"
+    FLUSHDISKTYPE=ASYNC_FLUSH
+fi
+
+
 cat > ${CONFIG_FILE} <<EOF
 #集群名称
 brokerClusterName=${BROKER_CLUSTER_NAME}
@@ -21,7 +55,7 @@ brokerId=${BROKER_ID}
 #broker角色 ASYNC_MASTER为异步主节点，SYNC_MASTER为同步主节点，SLAVE为从节点
 brokerRole=${BROKER_ROLE}
 #刷新数据到磁盘的方式，ASYNC_FLUSH刷新
-flushDiskType=ASYNC_FLUSH
+flushDiskType=${FLUSHDISKTYPE}
 ##Broker 对外服务的监听端口
 listenPort=10911
 #nameserver地址，分号分割

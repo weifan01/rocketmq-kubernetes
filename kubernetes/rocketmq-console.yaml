@@ -5,7 +5,7 @@ metadata:
   namespace: test
   name: cm-rocketmq-console
 data:
-  JAVA_OPTS: "-Drocketmq.namesrv.addr=rocketmq-namesrv-0.namesrv.test:9876 -Dcom.rocketmq.sendMessageWithVIPChannel=false"
+  JAVA_OPTS: "-Drocketmq.namesrv.addr=svc-rocketmq-namesrv.test.NAMESPACE.mhc.local:9876 -Dcom.rocketmq.sendMessageWithVIPChannel=false"
 
 ---
 kind: Service

@@ -2,7 +2,7 @@
 kind: Service
 apiVersion: v1
 metadata:
-  namespace: test
+  namespace: NAMESPACE
   name: svc-rocketmq-broker-slave
   labels:
     app: rocketmq-broker
@@ -26,7 +26,7 @@ spec:
 kind: StatefulSet
 apiVersion: apps/v1
 metadata:
-  namespace: test
+  namespace: NAMESPACE
   name: rocketmq-broker-slave
   labels:
     app: rocketmq-broker-slave
@@ -44,20 +44,20 @@ spec:
         app: rocketmq-broker-slave
     spec:
       containers:
-      - image: reg.haimaiche.net/library/rocketmq-broker:4.7.0
+      - image: reg.haimaiche.net/library/rocketmq-broker:4.7.1
         name: rocketmq-broker-slave
         imagePullPolicy: Always
         env:
           - name: JAVA_OPT
             value: "-Duser.home=/opt -Xms2g -Xmx2g"
           - name: BROKER_CLUSTER_NAME
-            value: "camaro"
+            value: "NAMESPACE"
           - name: BROKER_ID
             value: "1"
           - name: BROKER_ROLE
             value: "SLAVE"
           - name: NAME_SRV_ADDR
-            value: "rocketmq-namesrv-0.namesrv.test:9876"
+            value: "svc-rocketmq-namesrv.NAMESPACE.svc.mhc.local:9876"
           - name: AUTO_CREATE_TOPIC_ENABLE
             value: "FALSE"
         ports:

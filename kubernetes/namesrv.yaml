@@ -2,8 +2,8 @@
 kind: Service
 apiVersion: v1
 metadata:
-  namespace: test
-  name: namesrv
+  namespace: NAMESPACE
+  name: svc-rocketmq
   labels:
     app: rocketmq-namesrv
 spec:
@@ -14,24 +14,25 @@ spec:
   selector:
     app: rocketmq-namesrv
   type: ClusterIP
-  clusterIP: None
   sessionAffinity: ClientIP
 
 ---
-kind: StatefulSet
+kind: Deployment
 apiVersion: apps/v1
 metadata:
-  namespace: test
+  namespace: NAMESPACE
   name: rocketmq-namesrv
   labels:
     app: rocketmq-namesrv
 spec:
   replicas: 1
-  serviceName: namesrv
   selector:
     matchLabels:
       app: rocketmq-namesrv
-  updateStrategy:
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
     type: RollingUpdate
   template:
     metadata:
@@ -39,16 +40,19 @@ spec:
         app: rocketmq-namesrv
     spec:
       containers:
-      - image: reg.haimaiche.net/library/rocketmq-namesrv:4.7.0
+      - image: reg.haimaiche.net/library/rocketmq-namesrv:4.7.1
         imagePullPolicy: Always
         name: rocketmq-namesrv
+        env:
+        - name: JAVA_OPT
+          value: "-Duser.home=/opt -Xms1g -Xmx1g"
         ports:
         - protocol: TCP
           containerPort: 9876
         resources:
           requests:
             cpu: 200m
-            memory: 1Gi
+            memory: 500Mi
           limits:
             cpu: 1
             memory: 1Gi
