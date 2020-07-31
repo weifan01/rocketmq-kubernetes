@@ -78,3 +78,5 @@ spec:
           periodSeconds: 15
       dnsPolicy: ClusterFirst
       restartPolicy: Always
+      imagePullSecrets:
+      - name: reg-in
