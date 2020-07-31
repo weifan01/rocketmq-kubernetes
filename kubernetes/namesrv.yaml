@@ -45,14 +45,14 @@ spec:
         name: rocketmq-namesrv
         env:
         - name: JAVA_OPT
-          value: "-Duser.home=/opt -Xms1g -Xmx1g"
+          value: "-Duser.home=/opt -Xms800m -Xmx800m"
         ports:
         - protocol: TCP
           containerPort: 9876
         resources:
           requests:
             cpu: 200m
-            memory: 500Mi
+            memory: 1Gi
           limits:
             cpu: 1
             memory: 1Gi
