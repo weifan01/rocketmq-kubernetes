@@ -2,17 +2,17 @@
 kind: Service
 apiVersion: v1
 metadata:
-  namespace: NAMESPACE
-  name: svc-rocketmq
+  namespace: middle
+  name: svc-rocketmq-4.7.1
   labels:
-    app: rocketmq-namesrv
+    app: rocketmq-namesrv-4.7.1
 spec:
   ports:
   - protocol: TCP
     port: 9876
     targetPort: 9876
   selector:
-    app: rocketmq-namesrv
+    app: rocketmq-namesrv-4.7.1
   type: ClusterIP
   sessionAffinity: ClientIP
 
@@ -20,15 +20,15 @@ spec:
 kind: Deployment
 apiVersion: apps/v1
 metadata:
-  namespace: NAMESPACE
-  name: rocketmq-namesrv
+  namespace: middle
+  name: rocketmq-namesrv-4.7.1
   labels:
-    app: rocketmq-namesrv
+    app: rocketmq-namesrv-4.7.1
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: rocketmq-namesrv
+      app: rocketmq-namesrv-4.7.1
   strategy:
     rollingUpdate:
       maxSurge: 25%
@@ -37,12 +37,12 @@ spec:
   template:
     metadata:
       labels:
-        app: rocketmq-namesrv
+        app: rocketmq-namesrv-4.7.1
     spec:
       containers:
       - image: reg.haimaiche.net/library/rocketmq-namesrv:4.7.1
         imagePullPolicy: Always
-        name: rocketmq-namesrv
+        name: rocketmq-namesrv-4.7.1
         env:
         - name: JAVA_OPT
           value: "-Duser.home=/opt -Xms800m -Xmx800m"
@@ -67,4 +67,4 @@ spec:
           initialDelaySeconds: 120
           periodSeconds: 10
       imagePullSecrets:
-        - name: reg-in
+        - name: reg-out

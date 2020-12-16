@@ -2,10 +2,10 @@
 kind: Service
 apiVersion: v1
 metadata:
-  namespace: NAMESPACE
-  name: svc-rocketmq-broker-master
+  namespace: middle
+  name: svc-rocketmq-broker-master-4.7.1
   labels:
-    app: rocketmq-broker
+    app: rocketmq-broker-4.7.1
 spec:
   ports:
   - name: rocketmq-port-10909
@@ -17,7 +17,7 @@ spec:
     port: 10911
     targetPort: 10911
   selector:
-    app: rocketmq-broker-master
+    app: rocketmq-broker-master-4.7.1
   type: ClusterIP
   clusterIP: None
   sessionAffinity: ClientIP
@@ -26,38 +26,38 @@ spec:
 kind: StatefulSet
 apiVersion: apps/v1
 metadata:
-  namespace: NAMESPACE
-  name: rocketmq-broker-master
+  namespace: middle
+  name: rocketmq-broker-master-4.7.1
   labels:
-    app: rocketmq-broker-master
+    app: rocketmq-broker-master-4.7.1
 spec:
   replicas: 1
-  serviceName: svc-rocketmq-broker-master
+  serviceName: svc-rocketmq-broker-master-4.7.1
   selector:
     matchLabels:
-      app: rocketmq-broker-master
+      app: rocketmq-broker-master-4.7.1
   updateStrategy:
     type: RollingUpdate
   template:
     metadata:
       labels:
-        app: rocketmq-broker-master
+        app: rocketmq-broker-master-4.7.1
     spec:
       containers:
       - image: reg.haimaiche.net/library/rocketmq-broker:4.7.1
-        name: rocketmq-broker-master
+        name: rocketmq-broker-master-4.7.1
         imagePullPolicy: Always
         env:
           - name: JAVA_OPT
             value: "-Duser.home=/opt -Xms2g -Xmx2g"
           - name: BROKER_CLUSTER_NAME
-            value: "NAMESPACE"
+            value: "camaro"
           - name: BROKER_ID
             value: "0"
           - name: BROKER_ROLE
             value: "ASYNC_MASTER"
           - name: NAME_SRV_ADDR
-            value: "svc-rocketmq.NAMESPACE.svc.mhc.local:9876"
+            value: "svc-rocketmq.middle.svc.mhc.local:9876"
           - name: AUTO_CREATE_TOPIC_ENABLE
             value: "FALSE"
         ports:
@@ -88,7 +88,7 @@ spec:
           initialDelaySeconds: 120
           periodSeconds: 10
       imagePullSecrets:
-        - name: reg-in
+        - name: reg-out
   volumeClaimTemplates:
     - metadata:
         name: mqstore
@@ -98,7 +98,7 @@ spec:
         resources:
           requests:
             storage: "20Gi"
-        storageClassName: managed-nfs-storage-02
+        storageClassName: alicloud-disk-ssd1-hangzhou-be
     - metadata:
         name: mqlogs
       spec:
@@ -107,4 +107,4 @@ spec:
         resources:
           requests:
             storage: "20Gi"
-        storageClassName: managed-nfs-storage
+        storageClassName: alicloud-nas-log
